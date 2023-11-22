@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(MyApp());
 }
 
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return HalamanBeranda();
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'jelajah',
+          builder: (BuildContext context, GoRouterState state) {
+            return HalamanJelajah();
+          },
+        ),
+        GoRoute(
+          path: 'akun',
+          builder: (BuildContext context, GoRouterState state) {
+            return HalamanAkun();
+          },
+        ),
+      ],
+    ),
+  ],
+);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Praktikum Navigasi',
-      home: HalamanBeranda(),
+      routerConfig: _router,
     );
   }
 }
@@ -37,22 +63,12 @@ class HalamanBeranda extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.library_books),
               title: const Text('Lihat Koleksi'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HalamanJelajah()),
-                );
-              },
+              onTap: () => context.go('/jelajah'),
             ),
             ListTile(
               leading: const Icon(Icons.man_3),
               title: const Text('Akun'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HalamanAkun()),
-                );
-              },
+              onTap: () => context.go('/akun'),
             ),
           ],
         ),
@@ -68,11 +84,26 @@ class HalamanJelajah extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Halaman Koleksi'),
-      ),
+      appBar: AppBar(title: const Text('Halaman Koleksi')),
       body: const Center(
         child: Text('Ini adalah tampilan Halaman Lihat Koleksi'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Formal',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Kasual',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Vintage',
+          ),
+        ],
+        selectedItemColor: Colors.amber[800],
       ),
     );
   }
